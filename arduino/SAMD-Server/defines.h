@@ -143,11 +143,11 @@
 // Debug Level from 0 to 4
 #define _WEBSOCKETS_LOGLEVEL_     3
 
-const char* ssid = "ssid"; //Enter SSID
-const char* password = "password"; //Enter Password
+const char* ssid = "T-2_4295d1"; //Enter SSID
+const char* password = "INNBOX2729000677"; //Enter Password
 
 // Select the IP address according to your local network
-IPAddress serverIP(192, 168, 2, 95);
+IPAddress serverIP(192, 168, 64, 95);
 
 
 #define WEBSOCKETS_PORT     8080

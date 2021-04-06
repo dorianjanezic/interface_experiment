@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aedes": "^0.45.0",
     "express": "^4.17.1",
     "socket.io": "^4.0.0"
   }

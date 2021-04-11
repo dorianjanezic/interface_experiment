@@ -1,8 +1,4 @@
 #include <Arduino.h>
-#line 1 "C:\\Users\\lukas\\Documents\\git\\interface_experiment\\arduino\\Measure_angle_Arduino_MPU6050\\Measure_angle_Arduino_MPU6050.ino"
-
-
-#include <Wire.h>
 #include <MQTT.h>
 #include <WiFiNINA.h>
 #include "Arduino_LSM6DS3.h"
@@ -15,16 +11,9 @@ WiFiClient net;
 MQTTClient client;
 
 unsigned long lastMillis = 0;
-
-#line 17 "C:\\Users\\lukas\\Documents\\git\\interface_experiment\\arduino\\Measure_angle_Arduino_MPU6050\\Measure_angle_Arduino_MPU6050.ino"
 void connect();
-#line 49 "C:\\Users\\lukas\\Documents\\git\\interface_experiment\\arduino\\Measure_angle_Arduino_MPU6050\\Measure_angle_Arduino_MPU6050.ino"
 void messageReceived(String &topic, String &payload);
-#line 52 "C:\\Users\\lukas\\Documents\\git\\interface_experiment\\arduino\\Measure_angle_Arduino_MPU6050\\Measure_angle_Arduino_MPU6050.ino"
-void setup();
-#line 85 "C:\\Users\\lukas\\Documents\\git\\interface_experiment\\arduino\\Measure_angle_Arduino_MPU6050\\Measure_angle_Arduino_MPU6050.ino"
-void loop();
-#line 17 "C:\\Users\\lukas\\Documents\\git\\interface_experiment\\arduino\\Measure_angle_Arduino_MPU6050\\Measure_angle_Arduino_MPU6050.ino"
+
 void connect() {
   Serial.print("checking wifi...");
   while (WiFi.status() != WL_CONNECTED) {

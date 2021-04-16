@@ -4,6 +4,8 @@
 #define ULTRASONIC_TRIG_PIN     5   // pin TRIG 
 #define ULTRASONIC_ECHO_PIN     4 // pin ECHO 
 
+int distance;
+
 EspMQTTClient client(
   "0F620A",
   "l56mq35itl",
@@ -36,7 +38,7 @@ void onConnectionEstablished() {
 void loop() {
 
   // measure distance 
-  long duration, distance;
+  long duration;
   digitalWrite(ULTRASONIC_TRIG_PIN, LOW);  
   delayMicroseconds(2); 
   

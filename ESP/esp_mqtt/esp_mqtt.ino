@@ -52,7 +52,7 @@ void loop() {
 
   String message = String (distance);
 
-  client.publish("mytopic/test", distance);
+  client.publish("mytopic/test", message);
 
 
 client.loop();

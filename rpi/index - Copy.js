@@ -1,7 +1,6 @@
 const aedes = require('aedes')();
 const server = require('net').createServer(aedes.handle);
 const httpServer = require('http').createServer(handler);
-var io = require('socket.io')(httpServer); //require socket.io module and pass the http object (server)
 var fs = require('fs'); //require filesystem module
 const ws = require('websocket-stream');
 const port = 1883;
@@ -42,19 +41,17 @@ aedes.on('subscribe', function (subscriptions, client) {
   );
 });
 
-// This is an example
-
-// io.sockets.on('connection', function (socket) {
-//   // WebSocket Connection
-//   var lightvalue = 0; //static variable for current status
-//   socket.on('light', function (data) {
-//     //get light switch status from client
-//     lightvalue = data;
-//     if (lightvalue) {
-//       console.log(lightvalue); //turn LED on or off, for now we will just show it in console.log
-//     }
-//   });
-// });
+io.sockets.on('connection', function (socket) {
+  // WebSocket Connection
+  var lightvalue = 0; //static variable for current status
+  socket.on('light', function (data) {
+    //get light switch status from client
+    lightvalue = data;
+    if (lightvalue) {
+      console.log(lightvalue); //turn LED on or off, for now we will just show it in console.log
+    }
+  });
+});
 aedes.on('unsubscribe', function (subscriptions, client) {
   console.log(
     'MQTT client \x1b[32m' +
@@ -86,7 +83,6 @@ aedes.on('clientDisconnect', function (client) {
 
 // fired when a message is published
 aedes.on('publish', async function (packet, client) {
-  //socket.emit('light', packet.payload.toString()); //send button status to client
   console.log(
     'Client \x1b[31m' +
       (client ? client.id : 'BROKER_' + aedes.id) +

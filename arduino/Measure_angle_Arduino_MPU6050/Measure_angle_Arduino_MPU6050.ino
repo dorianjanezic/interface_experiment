@@ -50,7 +50,8 @@ void messageReceived(String &topic, String &payload) {
   Serial.println(topic + ": " + payload);
 }
 void setup() {
-
+                                             
+  Serial.begin(115200);
      // start the IMU:
   if (!IMU.begin()) {
     Serial.println("Failed to initialize IMU");
@@ -71,11 +72,10 @@ void setup() {
   // divide by 1000 to get avarage offset
   gyro_x_cal /= 1000;                                                 
   gyro_y_cal /= 1000;                                                 
-  gyro_z_cal /= 1000;                                                 
-  Serial.begin(115200);
+  gyro_z_cal /= 1000;    
     // start wifi and mqtt
   WiFi.begin(ssid, pass);
-  client.begin("192.168.64.101", net);
+  client.begin("192.168.64.104", net);
   client.onMessage(messageReceived);
 
   connect();

@@ -4,12 +4,29 @@
 <body>
 
   <h1>Control LED light</h1>
-  <p><input type="checkbox" id="light"></p>
+  <p id="p1">Hello World!</p>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
   <!-- include socket.io client side script -->
   <script>
-    var socket = io();
+    //Open and connect socket
+    let socket = io();
+    window.addEventListener('load', function () {
+
+
+      //Listen for confirmation of connection
+      socket.on('connect', function () {
+        console.log("Connected");
+      });
+
+
+    });
+
+    socket.on('gyro', function (data) {
+      // console.log(data);
+      console.log(data);
+      document.getElementById("p1").innerHTML = data;
+    });
   </script>
 
 </body>

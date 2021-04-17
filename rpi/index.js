@@ -1,6 +1,8 @@
 const aedes = require('aedes')();
 const server = require('net').createServer(aedes.handle);
 const httpServer = require('http').createServer(handler);
+var nedb = require('nedb');
+var db = new nedb('mqtt.db');
 var io = require('socket.io')(httpServer); //require socket.io module and pass the http object (server)
 var fs = require('fs'); //require filesystem module
 const ws = require('websocket-stream');
@@ -32,6 +34,12 @@ function handler(req, res) {
 }
 
 aedes.on('subscribe', function (subscriptions, client) {
+  db.insert({
+    topic: '/',
+    action: 'subscribe',
+    timestamp: new Date(),
+    message: client.id + ' ' + subscriptions,
+  });
   console.log(
     'MQTT client \x1b[32m' +
       (client ? client.id : client) +
@@ -56,6 +64,12 @@ aedes.on('subscribe', function (subscriptions, client) {
 //   });
 // });
 aedes.on('unsubscribe', function (subscriptions, client) {
+  db.insert({
+    topic: '/',
+    action: 'unsubscribe',
+    timestamp: new Date(),
+    message: client.id + ' ' + topic,
+  });
   console.log(
     'MQTT client \x1b[32m' +
       (client ? client.id : client) +
@@ -68,6 +82,12 @@ aedes.on('unsubscribe', function (subscriptions, client) {
 
 // fired when a client connects
 aedes.on('client', function (client) {
+  db.insert({
+    topic: '/',
+    action: 'connect',
+    timestamp: new Date(),
+    message: client.id,
+  });
   console.log(
     'Client Connected: \x1b[33m' + (client ? client.id : client) + '\x1b[0m',
     'to broker',
@@ -77,6 +97,12 @@ aedes.on('client', function (client) {
 
 // fired when a client disconnects
 aedes.on('clientDisconnect', function (client) {
+  db.insert({
+    topic: '/',
+    action: 'disconnect',
+    timestamp: new Date(),
+    message: client.id,
+  });
   console.log(
     'Client Disconnected: \x1b[31m' + (client ? client.id : client) + '\x1b[0m',
     'to broker',
@@ -86,6 +112,20 @@ aedes.on('clientDisconnect', function (client) {
 
 // fired when a message is published
 aedes.on('publish', async function (packet, client) {
+  if (!client) return;
+
+  packet.payloadString = packet.payload.toString();
+  packet.payloadLength = packet.payload.length;
+  packet.payload = JSON.stringify(packet.payload);
+  packet.timestamp = new Date();
+  db.insert(packet);
+
+  db.insert({
+    topic: '/',
+    action: 'publish',
+    timestamp: new Date(),
+    message: client.id + ' ' + packet.topic,
+  });
   //socket.emit('light', packet.payload.toString()); //send button status to client
   console.log(
     'Client \x1b[31m' +

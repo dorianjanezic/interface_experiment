@@ -1,14 +1,38 @@
 <!DOCTYPE html>
 <html>
 
-<body>
+<head>
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+</head>
 
-  <h1>Control LED light</h1>
-  <p id="p1">Hello World!</p>
+<body>
+  <button id="button">Click Me</button>
+
+  <h1>Gyro printout</h1>
+  <p style="font-size: 40px;" id="p1">Hello World!</p>
 
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-  <!-- include socket.io client side script -->
   <script>
+    const client = mqtt.connect('ws://localhost:8888', {
+      clientId: 'javascript'
+    });
+
+    client.on('connect', function () {
+      console.log('connected!');
+      client.subscribe('/zGyro');
+    });
+
+    client.on('message', function (topic, message) {
+      console.log(topic + ': ' + message.toString());
+      document.getElementById("p1").innerHTML = message.toString();
+    });
+
+    document.querySelector('button').addEventListener('click', function () {
+      client.publish('hello', 'world');
+    });
+  </script>
+  <!-- include socket.io client side script -->
+  <!-- <script>
     //Open and connect socket
     let socket = io();
     window.addEventListener('load', function () {
@@ -27,7 +51,7 @@
       console.log(data);
       document.getElementById("p1").innerHTML = data;
     });
-  </script>
+  </script> -->
 
 </body>
 

@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+//express app and HTTP server
 let express = require('express');
 let app = express();
 app.use('/', express.static('public'));
@@ -6,10 +6,10 @@ let http = require('http');
 let server_http_index = http.createServer(app);
 let port_http_index = process.env.PORT || 3000;
 server_http_index.listen(port_http_index, function () {
-  console.log('Websocket srvr listening on port:', port_http_index);
+  console.log('HTTP listening on port:', port_http_index);
 });
 
-/////////////////////////////////////////////////////////////////////////////
+//MQTT broker and websocket stream
 const aedes = require('aedes')();
 const server = require('net').createServer(aedes.handle);
 const httpServer = require('http').createServer();
@@ -24,16 +24,12 @@ server.listen(port, function () {
 ws.createServer({ server: httpServer }, aedes.handle);
 
 httpServer.listen(wsPort, function () {
-  console.log('websocket server listening on port ', wsPort);
+  console.log('Websocket listening on port:', wsPort);
 });
-// const httpServer = require('http').createServer();
 
 const server_http = http.createServer(app);
-// server_http.createServer({ server: httpServer }, aedes.handle);
-// httpServer.listen(port_http, function () {
-//   console.log('Websocket srvr listening on port:', port_http);
-// });
 
+//fired when a client subscribes
 aedes.on('subscribe', function (subscriptions, client) {
   console.log(
     'MQTT client \x1b[32m' +
@@ -45,6 +41,7 @@ aedes.on('subscribe', function (subscriptions, client) {
   );
 });
 
+//fired when a client unsubscribes
 aedes.on('unsubscribe', function (subscriptions, client) {
   console.log(
     'MQTT client \x1b[32m' +

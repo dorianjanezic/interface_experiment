@@ -1,58 +1,14 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-</head>
-
-<body>
-  <button id="button">Click Me</button>
-
-  <h1>Gyro printout</h1>
-  <p style="font-size: 40px;" id="p1">Hello World!</p>
-
-  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-  <script>
-    const client = mqtt.connect('ws://localhost:8888', {
-      clientId: 'javascript'
-    });
-
-    client.on('connect', function () {
-      console.log('connected!');
-      client.subscribe('/zGyro');
-    });
-
-    client.on('message', function (topic, message) {
-      console.log(topic + ': ' + message.toString());
-      document.getElementById("p1").innerHTML = message.toString();
-    });
-
-    document.querySelector('button').addEventListener('click', function () {
-      client.publish('hello', 'world');
-    });
-  </script>
-  <!-- include socket.io client side script -->
-  <!-- <script>
-    //Open and connect socket
-    let socket = io();
-    window.addEventListener('load', function () {
-
-
-      //Listen for confirmation of connection
-      socket.on('connect', function () {
-        console.log("Connected");
-      });
-
-
-    });
-
-    socket.on('gyro', function (data) {
-      // console.log(data);
-      console.log(data);
-      document.getElementById("p1").innerHTML = data;
-    });
-  </script> -->
-
-</body>
-
+  <head>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.15/Tone.js"></script>
+  </head>
+  <body>
+    <button id="button">Click Me</button>
+    <h1>Gyro printout</h1>
+    <p style="font-size: 40px;" id="p1">Hello World!</p>
+    <script src="app.js"></script> 
+  </body>
 </html>

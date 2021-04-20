@@ -1,64 +1,36 @@
-let socket = io();
+//global variables
+let number = 100;
 
-//Listen for confirmation of connection
-socket.on('connect', function() {
-    console.log("Connected");
-  });
-
-let r;
-let g;
-let b;
-
-function setup(){
-    createCanvas(windowWidth, windowHeight);
-    background(255);
-
-    //create random r,g,b values
-    r = random(255);
-    g = random(255);
-    b = random(255);
-
-    //Listen for "positionUpdate" msg form the servber
-    socket.on('positionUpdate', function(data){
-        console.log(data);
-        drawPos(data);
+//establishing mqtt connection over websocket port
+const client = mqtt.connect('ws://localhost:8888', {
+      clientId: 'javascript'
     });
 
-    //Listen for "forceChange" msg from the server
-    socket.on('forceChange', function(data){
-        //create random r,g,b values
-        r = random(255);
-        g = random(255);
-        b = random(255);  
-    })
+    client.on('connect', function () {
+      console.log('connected!');
+      client.subscribe('distance');
+    });
+
+//tone.js sampler    
+const player = new Tone.Player("sounds/diva.wav").toDestination();
+
+//attach a click listener to a play button
+document.getElementById("button").addEventListener("click", async () => {
+  console.log("audio is ready");
+  player.start();
+});
+
+//map range
+function mapNumber (number, inMin, inMax, outMin, outMax) {
+  return (number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 }
 
-function mouseMoved(){
-    // fill(0); 
-    // ellipse(mouseX, mouseY, 10,10);
-    let mousePos = {
-                    x: mouseX,
-                    y: mouseY,
-                    "red": r,
-                    "green": g,
-                    "blue": b
-                };
-                
-    socket.emit('position', mousePos);
-}
+//on received message from mqtt
+    client.on('message', function (topic, message) {
+      console.log(topic + ': ' + message.toString());
+      document.getElementById("p1").innerHTML = message.toString();
+    });
 
-function drawPos(obj){
-    //use the r,g,b values sent from the server
-    fill(obj.red, obj.green, obj.blue); 
-    ellipse(obj.x, obj.y, 10,10);
-}
-
-function mousePressed(){
-    //create random r,g,b values
-    r = random(255);
-    g = random(255);
-    b = random(255);
-    
-    socket.emit("change", {"msg": "change"});
-
-}
+    document.getElementById('button').addEventListener('click', function () {
+      client.publish('hello', 'world');
+    });

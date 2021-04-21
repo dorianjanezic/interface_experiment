@@ -8,7 +8,7 @@ const client = mqtt.connect('ws://localhost:8888', {
 
     client.on('connect', function () {
       console.log('connected!');
-      client.subscribe('distance');
+      client.subscribe('/distance');
     });
 
 //tone.js sampler    

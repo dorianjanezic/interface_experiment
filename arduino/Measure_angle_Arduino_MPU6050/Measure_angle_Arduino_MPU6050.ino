@@ -97,12 +97,12 @@ void loop(){
   // https://invensense.tdk.com/products/motion-tracking/6-axis/mpu-6050/
   // LSM6ds33 sensitivity = 70 mdps/LSB   -->  0.000004=  (1 * 10**-3 )dps * 1 / 250Hz https://stackoverflow.com/questions/19161872/meaning-of-lsb-unit-and-unit-lsb
   //Gyro angle calculations . Note 0.0000611 = 1 / (250Hz x 65.5) 
-  angle_pitch += gyro_x * 0.004;                                   //Calculate the traveled pitch angle and add this to the angle_pitch variable
-  angle_roll += gyro_y * 0.004;                                    //Calculate the traveled roll angle and add this to the angle_roll variable
+  angle_pitch += gyro_x * 0.04;                                   //Calculate the traveled pitch angle and add this to the angle_pitch variable
+  angle_roll += gyro_y * 0.04;                                    //Calculate the traveled roll angle and add this to the angle_roll variable
   //0.000001066 = 0.0000611 * (3.142(PI) / 180degr) The Arduino sin function is in radians
   // 0.00000488755 = 0.004 * (3.142 / 180)
-  angle_pitch += angle_roll * sin(gyro_z * 0.00006982222);               //If the IMU has yawed transfer the roll angle to the pitch angel
-  angle_roll -= angle_pitch * sin(gyro_z * 0.00006982222);               //If the IMU has yawed transfer the pitch angle to the roll angel
+  angle_pitch += angle_roll * sin(gyro_z * 0.0006982222);               //If the IMU has yawed transfer the roll angle to the pitch angel
+  angle_roll -= angle_pitch * sin(gyro_z * 0.0006982222);               //If the IMU has yawed transfer the pitch angle to the roll angel
   
   //Accelerometer angle calculations
   acc_total_vector = sqrt((acc_x*acc_x)+(acc_y*acc_y)+(acc_z*acc_z));  //Calculate the total accelerometer vector
@@ -139,7 +139,7 @@ void loop(){
   Serial.println((angle_pitch_output));
   client.publish("/zGyro", message);
 
- while(micros() - loop_timer < 4000);                                 //Wait until the loop_timer reaches 4000us (250Hz) before starting the next loop
+ while(micros() - loop_timer < 40000);                                 //Wait until the loop_timer reaches 4000us (250Hz) before starting the next loop
  loop_timer = micros();//Reset the loop timer
   
 }

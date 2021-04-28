@@ -1,48 +1,29 @@
-//express app and HTTP server
-let express = require('express');
-let app = express();
-app.use('/', express.static('public'));
-let http = require('http');
-let server_http_index = http.createServer(app);
-let port_http_index = process.env.PORT || 3000;
-server_http_index.listen(port_http_index, function () {
-  console.log('HTTP listening on port:', port_http_index);
-});
-
-//MQTT broker and websocket stream
 const aedes = require('aedes')();
 const server = require('net').createServer(aedes.handle);
-const httpServer = require('http').createServer();
+const httpServer = require('http').createServer(handler);
+var fs = require('fs'); //require filesystem module
 const ws = require('websocket-stream');
 const port = 1883;
-const wsPort = 8888;
+const wsPort = 8080;
 
 server.listen(port, function () {
   console.log('Aedes listening on port:', port);
 });
 
-const http2 = require('https');
-const fs = require('fs');
+function handler(req, res) {
+  //create server
+  fs.readFile(__dirname + '/public/index.html', function (err, data) {
+    //read file index.html in public folder
+    if (err) {
+      res.writeHead(404, { 'Content-Type': 'text/html' }); //display 404 on error
+      return res.end('404 Not Found');
+    }
+    res.writeHead(200, { 'Content-Type': 'text/html' }); //write HTML
+    res.write(data); //write data from index.html
+    return res.end();
+  });
+}
 
-const options = {
-  key: fs.readFileSync('key.pem'),
-  cert: fs.readFileSync('cert.pem'),
-};
-
-// Create a secure HTTP/2 server
-const servers = http2.createServer(options);
-
-//server.listen(80);
-
-ws.createServer({ server: servers }, aedes.handle);
-
-servers.listen(wsPort, function () {
-  console.log('Websocket listening on port:', wsPort);
-});
-
-const server_http = http.createServer(app);
-
-//fired when a client subscribes
 aedes.on('subscribe', function (subscriptions, client) {
   console.log(
     'MQTT client \x1b[32m' +
@@ -54,7 +35,17 @@ aedes.on('subscribe', function (subscriptions, client) {
   );
 });
 
-//fired when a client unsubscribes
+io.sockets.on('connection', function (socket) {
+  // WebSocket Connection
+  var lightvalue = 0; //static variable for current status
+  socket.on('light', function (data) {
+    //get light switch status from client
+    lightvalue = data;
+    if (lightvalue) {
+      console.log(lightvalue); //turn LED on or off, for now we will just show it in console.log
+    }
+  });
+});
 aedes.on('unsubscribe', function (subscriptions, client) {
   console.log(
     'MQTT client \x1b[32m' +

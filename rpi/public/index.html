@@ -11,9 +11,8 @@
   <h1>Gyro printout</h1>
   <p style="font-size: 40px;" id="p1">Hello World!</p>
 
-  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
   <script>
-    const client = mqtt.connect('ws://localhost:8888', {
+    const client = mqtt.connect('wss://localhost:8888', {
       clientId: 'javascript'
     });
 

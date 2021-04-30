@@ -1,26 +1,19 @@
-//express app and HTTP server
-let express = require('express');
-let app = express();
-app.use('/', express.static('public'));
-let http = require('http');
-let server_http_index = http.createServer(app);
-let port_http_index = process.env.PORT || 3000;
-server_http_index.listen(port_http_index, function () {
-  console.log('HTTP listening on port:', port_http_index);
-});
+/////////////aedes/////////////////
 
 //MQTT broker and websocket stream
 const aedes = require('aedes')();
 const server = require('net').createServer(aedes.handle);
 const httpServer = require('http').createServer();
-const ws = require('websocket-stream');
 const port = 1883;
-const wsPort = 8888;
 
 server.listen(port, function () {
   console.log('Aedes listening on port:', port);
 });
+/////////////aedes/////////////////
+///////////////////////////////////////////////////websicjet////////////////////
 
+const ws = require('websocket-stream');
+const wsPort = 8888;
 const http2 = require('https');
 const fs = require('fs');
 
@@ -39,8 +32,18 @@ ws.createServer({ server: servers }, aedes.handle);
 servers.listen(wsPort, function () {
   console.log('Websocket listening on port:', wsPort);
 });
+///////////////////////////////////////////////////websicjet////////////////////
 
-const server_http = http.createServer(app);
+//express app and HTTP server
+let express = require('express');
+let app = express();
+app.use('/', express.static('public'));
+let http = require('http');
+let server_http_index = http2.createServer(options, app);
+let port_http_index = process.env.PORT || 3000;
+server_http_index.listen(port_http_index, function () {
+  console.log('HTTP listening on port:', port_http_index);
+});
 
 //fired when a client subscribes
 aedes.on('subscribe', function (subscriptions, client) {

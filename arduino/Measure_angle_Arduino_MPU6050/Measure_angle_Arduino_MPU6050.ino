@@ -23,7 +23,7 @@ void connect() {
   }
 
   Serial.print("\nconnecting...");
-  while (!client.connect("arduino", "public", "public")) {
+  while (!client.connect("arduino", "oasisrazor294", "604NiryUDL1xQd9j")) {
     Serial.print("/");
     delay(1000);
   }
@@ -75,7 +75,7 @@ void setup() {
   gyro_z_cal /= 1000;    
     // start wifi and mqtt
   WiFi.begin(ssid, pass);
-  client.begin("192.168.64.104", net);
+  client.begin("oasisrazor294.cloud.shiftr.io", net);
   client.onMessage(messageReceived);
 
   connect();

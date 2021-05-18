@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta
+      http-equiv="origin-trial"
+      data-feature="Generic Sensors"
+      data-expires="2018-02-27"
+      content="AjL+UlBzLjx+0FPXrML6IMA/Ax9GsO/7rUvV/aaKkh3KknUSwDBgymn0d3NhGeRMNS7FlYD73ernqvZNoqzNMw4AAABWeyJvcmlnaW4iOiJodHRwczovL2ludGVsLmdpdGh1Yi5pbzo0NDMiLCJmZWF0dXJlIjoiR2VuZXJpY1NlbnNvciIsImV4cGlyeSI6MTUxOTczOTAwNX0="
+    />
+
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.15/Tone.js"></script>
+  </head>
+
+  <body>
+     <script src="/js/three.min.js"></script>
+    <script src="/js/OBJLoader.js"></script>
+    <script src="/js/MTLLoader.js"></script>
+  
+
+    <label for="clientID">Client ID</label>
+    <input type="text" id="clientID" name="clientID" /><br /><br />
+    <label for="publish">Publish on topic</label>
+    <input type="text" id="publish" name="publish" /><br /><br />
+    <button id="button">CONNECT</button>       
+    <button id="accelPermsButton"  style="height:50px;" ><h1>Get Accelerometer Permissions</h1></button>
+        
+    
+    <p>αlphα = Z axis</p>
+    <p id="alpha">α</p>
+    
+    <p>βeta = X axis</p>
+    <p id="beta">β</p>
+    
+    <p>γamma = Y axis</p>
+    <p id="gama">γ</p>
+    
+    <button id="synthstart">start synth</button>
+    <button id="synthstop">stop synth</button>
+    
+    <p id="orientation">Rotate device to determine orientation</p>
+    
+    <!--<script src="/js/quaternions.js" type="module"></script>--> 
+    
+    <script src="/client.js"></script>    
+    <script src="/js/ios_permission.js"></script>
+    
+    
+  </body>
+</html>
